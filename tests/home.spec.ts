@@ -12,13 +12,13 @@ test.describe('Home page', () => {
     await expect(page.getByText(/27 obvodů/)).toBeVisible();
   });
 
-  test('renders SVG map with district markers', async ({ page }) => {
+  test('renders SVG map with clickable district regions', async ({ page }) => {
     await page.goto('');
-    const svg = page.locator('svg[aria-label="Mapa senátních obvodů ČR 2026"]');
-    await expect(svg).toBeVisible();
-    // All 27 district circles should be present
-    const circles = svg.locator('circle');
-    await expect(circles).toHaveCount(27);
+    // SVG should be present
+    await expect(page.locator('svg').first()).toBeVisible();
+    // All 27 active district paths should be present
+    const activeRegions = page.locator('.s-active');
+    await expect(activeRegions).toHaveCount(27);
   });
 
   test('district legend shows all 27 districts', async ({ page }) => {
@@ -28,11 +28,16 @@ test.describe('Home page', () => {
     await expect(links.first()).toBeVisible();
   });
 
-  test('map district link navigates to district page', async ({ page }) => {
+  test('legend link navigates to district page', async ({ page }) => {
     await page.goto('');
-    // Click on district 3 (Cheb) in the legend
-    await page.getByRole('link', { name: /3.*Cheb/ }).first().click();
+    await page.locator('a[href$="obvod/3/"]').last().click();
     await expect(page).toHaveURL(/\/obvod\/3\//);
     await expect(page.getByRole('heading', { name: /Cheb/ })).toBeVisible();
+  });
+
+  test('active SVG region has correct href', async ({ page }) => {
+    await page.goto('');
+    const region = page.locator('.s-active[aria-label="Obvod 3 – Cheb"]');
+    await expect(region).toHaveAttribute('data-href', /obvod\/3\//);
   });
 });
