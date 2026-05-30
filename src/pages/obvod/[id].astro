@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getDistricts, getDistrict, formatCzechName } from '../../lib/data';
+import { getDistricts, getDistrict, formatCzechName, getPartyLogoFiles } from '../../lib/data';
 
 export async function getStaticPaths() {
   return getDistricts().map((d) => ({
@@ -57,8 +57,13 @@ const hasResults = sorted.some((c) => c.round1Votes > 0);
                   </span>
                 )}
               </div>
-              <div class="mt-1 text-sm text-gray-500 flex flex-wrap gap-x-3 gap-y-0.5">
-                <span>{c.electoralParty}</span>
+              <div class="mt-1 text-sm text-gray-500 flex flex-wrap items-center gap-x-3 gap-y-0.5">
+                {getPartyLogoFiles(c.electoralParty).length > 0
+                  ? getPartyLogoFiles(c.electoralParty).map((logo) => (
+                      <img src={`${base}logos/${logo}`} alt={logo.replace('.svg','')} class="h-5 w-auto" />
+                    ))
+                  : <span>{c.electoralParty}</span>
+                }
                 <span>·</span>
                 <span>{c.occupation}</span>
                 <span>·</span>
