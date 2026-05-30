@@ -58,6 +58,7 @@ Přehled obovdů je fixní, data o kandidátech jsou k dispozici vse složce dat
 
 ## Technologie
 
+ - node 24
  - astrojs in version 6.4.2
  - typescript
  - data in json and markdown
