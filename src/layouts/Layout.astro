@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL;
     <title>{title} – Senátní volby 2026</title>
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
-  <body class="min-h-screen bg-white text-gray-900 font-sans">
+  <body class="min-h-screen bg-white text-gray-900 font-sans flex flex-col">
     <header style="background-color: #11457E;">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
         <a href={base} class="font-semibold text-lg tracking-tight transition-opacity hover:opacity-80" style="color: white;">
@@ -27,7 +27,7 @@ const base = import.meta.env.BASE_URL;
         <span class="text-sm" style="color: rgba(255,255,255,0.7);">Česká republika</span>
       </div>
     </header>
-    <main class="max-w-5xl mx-auto px-4 py-8">
+    <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
       <slot />
     </main>
     <footer class="mt-12" style="border-top: 3px solid #D7141A;">
