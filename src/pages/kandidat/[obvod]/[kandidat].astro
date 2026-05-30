@@ -25,6 +25,9 @@ const winner = round2Candidates.length > 0
 const isWinner = winner?.candidateNumber === candidate.candidateNumber;
 const hasResults = district.candidates.some((c) => c.round1Votes > 0);
 const profileSections = getCandidateProfileSections(districtId, candidateNumber);
+const POLITICAL_STANCES_HEADING = 'Projevované politické postoje';
+const politicalStancesSection = profileSections.find((s) => s.heading === POLITICAL_STANCES_HEADING);
+const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STANCES_HEADING);
 ---
 <Layout title={candidate.name} description={`${candidate.name} – kandidát v obvodu ${district.id} ${district.name}`}>
   <nav class="text-sm mb-6 flex items-center gap-2" style="color: #11457E;">
@@ -126,7 +129,15 @@ const profileSections = getCandidateProfileSections(districtId, candidateNumber)
     )}
   </div>
 
-  {profileSections.map((section) => (
+  <section class="rounded-lg p-5 mb-4" style="border: 1px solid #11457E30;">
+    <h2 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color: #11457E;">{POLITICAL_STANCES_HEADING}</h2>
+    {politicalStancesSection?.body
+      ? <p class="text-sm text-gray-700 whitespace-pre-line">{politicalStancesSection.body}</p>
+      : <p class="text-sm text-gray-400 italic">Bude doplněno.</p>
+    }
+  </section>
+
+  {otherSections.map((section) => (
     <section class="rounded-lg p-5 mb-4" style="border: 1px solid #11457E30;">
       <h2 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color: #11457E;">{section.heading}</h2>
       {section.body
