@@ -1,7 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getCandidates, getDistrict, getCandidateProfile } from '../../../lib/data';
-import { marked } from 'marked';
+import { getCandidates, getDistrict, getCandidateProfileSections } from '../../../lib/data';
 
 export async function getStaticPaths() {
   return getCandidates().map((c) => ({
@@ -25,8 +24,7 @@ const winner = round2Candidates.length > 0
   : null;
 const isWinner = winner?.candidateNumber === candidate.candidateNumber;
 const hasResults = district.candidates.some((c) => c.round1Votes > 0);
-const profileMd = getCandidateProfile(districtId, candidateNumber);
-const profileHtml = profileMd ? marked(profileMd) : '';
+const profileSections = getCandidateProfileSections(districtId, candidateNumber);
 ---
 <Layout title={candidate.name} description={`${candidate.name} – kandidát v obvodu ${district.id} ${district.name}`}>
   <nav class="text-sm mb-6 flex items-center gap-2" style="color: #11457E;">
@@ -128,9 +126,13 @@ const profileHtml = profileMd ? marked(profileMd) : '';
     )}
   </div>
 
-  {profileHtml && (
-    <section class="rounded-lg p-5 prose prose-sm max-w-none" style="border: 1px solid #11457E30;">
-      <Fragment set:html={profileHtml} />
+  {profileSections.map((section) => (
+    <section class="rounded-lg p-5 mb-4" style="border: 1px solid #11457E30;">
+      <h2 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color: #11457E;">{section.heading}</h2>
+      {section.body
+        ? <p class="text-sm text-gray-700 whitespace-pre-line">{section.body}</p>
+        : <p class="text-sm text-gray-400 italic">Bude doplněno.</p>
+      }
     </section>
-  )}
+  ))}
 </Layout>

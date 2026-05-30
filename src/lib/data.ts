@@ -84,13 +84,29 @@ export function getCandidate(districtId: number, candidateNumber: number): Candi
   );
 }
 
-export function getCandidateProfile(districtId: number, candidateNumber: number): string {
+export interface ProfileSection {
+  heading: string;
+  body: string;
+}
+
+export function getCandidateProfileSections(districtId: number, candidateNumber: number): ProfileSection[] {
   const profilePath = path.resolve(
     process.cwd(),
     `data/profiles/${districtId}/${candidateNumber}.md`
   );
-  if (!fs.existsSync(profilePath)) return '';
-  return fs.readFileSync(profilePath, 'utf-8');
+  if (!fs.existsSync(profilePath)) return [];
+  const md = fs.readFileSync(profilePath, 'utf-8');
+
+  const sections: ProfileSection[] = [];
+  // Split on ## headings (skip leading # h1 title line if present)
+  const parts = md.split(/^## /m);
+  for (const part of parts.slice(1)) {
+    const newline = part.indexOf('\n');
+    const heading = newline === -1 ? part.trim() : part.slice(0, newline).trim();
+    const body = newline === -1 ? '' : part.slice(newline + 1).trim();
+    sections.push({ heading, body });
+  }
+  return sections;
 }
 
 // Approximate SVG coordinates for each district center (viewBox 0 0 800 450)
