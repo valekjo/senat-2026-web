@@ -1,7 +1,9 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getCandidates, getDistrict, getCandidateProfileSections, formatCzechName, getPartyLogoFiles } from '../../../lib/data';
+import { getCandidates, getDistrict, formatCzechName, getPartyLogoFiles } from '../../../lib/data';
 import { marked } from 'marked';
+import fs from 'node:fs';
+import path from 'node:path';
 
 export async function getStaticPaths() {
   return getCandidates().map((c) => ({
@@ -25,13 +27,11 @@ const winner = round2Candidates.length > 0
   : null;
 const isWinner = winner?.candidateNumber === candidate.candidateNumber;
 const hasResults = district.candidates.some((c) => c.round1Votes > 0);
-const profileSections = getCandidateProfileSections(districtId, candidateNumber);
 const displayName = formatCzechName(candidate.name);
 const birthYear = 2026 - candidate.age;
 const partyLogos = getPartyLogoFiles(candidate.electoralParty);
-const POLITICAL_STANCES_HEADING = 'Projevované politické postoje';
-const politicalStancesSection = profileSections.find((s) => s.heading === POLITICAL_STANCES_HEADING);
-const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STANCES_HEADING);
+const profilePath = path.resolve(process.cwd(), `data/profiles/${districtId}/${candidateNumber}.md`);
+const profileMd = fs.existsSync(profilePath) ? fs.readFileSync(profilePath, 'utf-8') : '';
 ---
 <Layout title={displayName} description={`${displayName} – kandidát v obvodu ${district.id} ${district.name}`}>
   <nav class="text-sm mb-6 flex items-center gap-2" style="color: #11457E;">
@@ -109,51 +109,9 @@ const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STAN
 
   </div>
 
-  <section class="rounded-lg p-5 mb-4" style="border: 1px solid #11457E30;">
-    <h2 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color: #11457E;">{POLITICAL_STANCES_HEADING}</h2>
-    {politicalStancesSection?.body
-      ? <div class="political-stances text-gray-700" set:html={marked.parse(politicalStancesSection.body)} />
-      : <p class="text-sm text-gray-400 italic">Bude doplněno.</p>
-    }
-  </section>
-
-  {otherSections.map((section) => (
-    <section class="rounded-lg p-5 mb-4" style="border: 1px solid #11457E30;">
-      <h2 class="text-xs font-semibold uppercase tracking-wide mb-3" style="color: #11457E;">{section.heading}</h2>
-      {section.body
-        ? <p class="text-sm text-gray-700 whitespace-pre-line">{section.body}</p>
-        : <p class="text-sm text-gray-400 italic">Bude doplněno.</p>
-      }
-    </section>
-  ))}
+  {profileMd && (
+    <div class="profile-content prose prose-sm max-w-none text-gray-700 mt-6"
+      set:html={marked.parse(profileMd)} />
+  )}
 </Layout>
 
-<style>
-  .political-stances p {
-    margin-bottom: 1.25rem;
-    font-size: 0.9rem;
-    line-height: 1.65;
-  }
-  .political-stances p:last-child {
-    margin-bottom: 0;
-  }
-  /* Topic heading lines (bold with emoji) */
-  .political-stances p > strong:first-child {
-    display: block;
-    font-size: 1.1rem;
-    margin-bottom: 0.25rem;
-  }
-  /* "pro"/"proti" inline bold */
-  .political-stances p > strong:not(:first-child) {
-    font-weight: 700;
-  }
-  /* Italic note line */
-  .political-stances p > em {
-    font-size: 0.8rem;
-    color: #6b7280;
-  }
-  .political-stances a {
-    color: #11457E;
-    text-decoration: underline;
-  }
-</style>
