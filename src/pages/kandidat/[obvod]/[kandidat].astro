@@ -35,10 +35,10 @@ const rawMd = fs.existsSync(profilePath) ? fs.readFileSync(profilePath, 'utf-8')
 const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
 ---
 <Layout title={displayName} description={`${displayName} – kandidát v obvodu ${district.id} ${district.name}`}>
-  <nav class="text-sm mb-6 flex items-center gap-2" style="color: #11457E;">
-    <a href={base} class="hover:opacity-70 transition-opacity" style="color: #11457E;">Přehled obvodů</a>
-    <span style="color: #D7141A;">›</span>
-    <a href={`${base}obvod/${district.id}/`} class="hover:opacity-70 transition-opacity" style="color: #11457E;">
+  <nav class="text-sm mb-6 flex items-center gap-2" style="color: #2a2b66;">
+    <a href={base} class="hover:opacity-70 transition-opacity" style="color: #2a2b66;">Přehled obvodů</a>
+    <span style="color: #fa1a5b;">›</span>
+    <a href={`${base}obvod/${district.id}/`} class="hover:opacity-70 transition-opacity" style="color: #2a2b66;">
       Obvod {district.id} – {district.name}
     </a>
   </nav>
@@ -48,7 +48,7 @@ const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
       <div class="shrink-0 mt-1">
         <div
           class="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold"
-          style="background-color: #11457E; color: white; border: 3px solid #D7141A;"
+          style="background-color: #2a2b66; color: white; border: 3px solid #fa1a5b;"
         >
           {candidate.candidateNumber}
         </div>
@@ -63,8 +63,8 @@ const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-    <section class="rounded-lg p-5" style="border: 1px solid #11457E30;">
-      <h2 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color: #11457E;">Základní informace</h2>
+    <section class="rounded-lg p-5" style="border: 1px solid #2a2b6630;">
+      <h2 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color: #2a2b66;">Základní informace</h2>
       <dl class="space-y-3">
         <div class="flex justify-between gap-4">
           <dt class="text-sm text-gray-500">Věk</dt>
@@ -101,8 +101,8 @@ const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
       </dl>
     </section>
 
-    <section class="rounded-lg p-5" style="border: 1px solid #11457E30;">
-        <h2 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color: #11457E;">Jak se zapojit</h2>
+    <section class="rounded-lg p-5" style="border: 1px solid #2a2b6630;">
+        <h2 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color: #2a2b66;">Jak se zapojit</h2>
         {profileMd && (
           <div class="profile-content prose prose-sm max-w-none text-gray-700 mt-6"
             set:html={marked.parse(profileMd)} />

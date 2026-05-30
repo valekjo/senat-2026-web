@@ -18,20 +18,22 @@ const base = import.meta.env.BASE_URL;
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
   </head>
   <body class="min-h-screen bg-white text-gray-900 font-sans flex flex-col">
-    <header style="background-color: #11457E;">
+    <header style="background-color: #2a2b66;">
       <div class="max-w-5xl mx-auto px-4 py-3 flex items-center gap-3">
-        <a href={base} class="font-semibold text-lg tracking-tight transition-opacity hover:opacity-80" style="color: white;">
-          <span style="color: #D7141A;">pomoz</span>mi<span style="color: #D7141A;">do</span>senatu</span>.cz
+        <a href={base} class="transition-opacity hover:opacity-80 flex items-center gap-2">
+          <img src="https://milionchvilek.cz/assets/icons/header_logo.svg" alt="Milion chvilek" class="h-8 w-auto" />
         </a>
-        <span style="color: #D7141A; font-size: 1.25rem;">|</span>
-        <span class="text-sm" style="color: rgba(255,255,255,0.7);">Česká republika</span>
+        <span style="color: #fa1a5b; font-size: 1.25rem;">|</span>
+        <a href={base} class="font-semibold text-lg tracking-tight transition-opacity hover:opacity-80" style="color: white;">
+          <span style="color: #fa1a5b;">pomoz</span>mi<span style="color: #fa1a5b;">do</span>senatu</span>.cz
+        </a>
       </div>
     </header>
     <main class="max-w-5xl mx-auto px-4 py-8 flex-1 w-full">
       <slot />
     </main>
-    <footer class="mt-12" style="border-top: 3px solid #D7141A;">
-      <div class="max-w-5xl mx-auto px-4 py-4 text-sm text-center" style="color: #11457E;">
+    <footer class="mt-12" style="border-top: 3px solid #fa1a5b;">
+      <div class="max-w-5xl mx-auto px-4 py-4 text-sm text-center" style="color: #2a2b66;">
         Data: Český statistický úřad · Volby do Senátu Parlamentu ČR 2026
       </div>
     </footer>

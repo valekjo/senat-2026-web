@@ -19,18 +19,18 @@ const hasResults = sorted.some((c) => c.round1Votes > 0);
 ---
 <Layout title={`Obvod ${district.id} – ${district.name}`} description={`Kandidáti v obvodu ${district.id} ${district.name}`}>
   <nav class="text-sm mb-6">
-    <a href={base} class="transition-opacity hover:opacity-70" style="color: #11457E;">← Přehled obvodů</a>
+    <a href={base} class="transition-opacity hover:opacity-70" style="color: #2a2b66;">← Přehled obvodů</a>
   </nav>
 
   <div class="mb-8">
     <div class="flex items-center gap-3 mb-1">
       <span
         class="inline-flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold"
-        style="background-color: #11457E; color: white; border: 2px solid #D7141A;"
+        style="background-color: #2a2b66; color: white; border: 2px solid #fa1a5b;"
       >
         {district.id}
       </span>
-      <h1 class="text-3xl font-bold" style="color: #11457E;">{district.name}</h1>
+      <h1 class="text-3xl font-bold" style="color: #2a2b66;">{district.name}</h1>
     </div>
     <p class="text-gray-500 ml-13">{district.candidates.length} kandidátů</p>
   </div>
