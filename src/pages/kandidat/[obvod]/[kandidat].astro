@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getCandidates, getDistrict, getCandidateProfileSections, formatCzechName } from '../../../lib/data';
+import { getCandidates, getDistrict, getCandidateProfileSections, formatCzechName, getPartyLogoFiles } from '../../../lib/data';
 import { marked } from 'marked';
 
 export async function getStaticPaths() {
@@ -28,6 +28,7 @@ const hasResults = district.candidates.some((c) => c.round1Votes > 0);
 const profileSections = getCandidateProfileSections(districtId, candidateNumber);
 const displayName = formatCzechName(candidate.name);
 const birthYear = 2026 - candidate.age;
+const partyLogos = getPartyLogoFiles(candidate.electoralParty);
 const POLITICAL_STANCES_HEADING = 'Projevované politické postoje';
 const politicalStancesSection = profileSections.find((s) => s.heading === POLITICAL_STANCES_HEADING);
 const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STANCES_HEADING);
@@ -84,9 +85,16 @@ const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STAN
           <dt class="text-sm text-gray-500">Věk</dt>
           <dd class="text-sm font-medium text-gray-900">*{birthYear} ({candidate.age} let)</dd>
         </div>
-        <div class="flex justify-between gap-4">
+        <div class="flex justify-between gap-4 items-center">
           <dt class="text-sm text-gray-500">Volební strana</dt>
-          <dd class="text-sm font-medium text-gray-900 text-right">{candidate.electoralParty}</dd>
+          <dd class="text-sm font-medium text-gray-900 text-right flex items-center gap-2 flex-wrap justify-end">
+            {partyLogos.length > 0
+              ? partyLogos.map((logo) => (
+                  <img src={`${base}logos/${logo}`} alt={logo.replace('.svg','')} class="h-6 w-auto" />
+                ))
+              : candidate.electoralParty
+            }
+          </dd>
         </div>
         <div class="flex justify-between gap-4">
           <dt class="text-sm text-gray-500">Politická příslušnost</dt>

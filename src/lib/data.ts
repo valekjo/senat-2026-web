@@ -84,6 +84,61 @@ export function getCandidate(districtId: number, candidateNumber: number): Candi
   );
 }
 
+// Maps a canonical party key to its logo filename in /public/logos/
+const PARTY_LOGOS: Record<string, string> = {
+  'ANO':       'ano.svg',
+  'ODS':       'ods.svg',
+  'KDU-ČSL':  'kdu-csl.svg',
+  'KDU':       'kdu-csl.svg',
+  'STAN':      'stan.svg',
+  'Piráti':    'pirati.svg',
+  'TOP 09':    'top09.svg',
+  'TOP09':     'top09.svg',
+  'TOP':       'top09.svg',
+  'SOCDEM':    'socdem.svg',
+  'ČSSD':      'socdem.svg',
+  'KSČM':      'kscm.svg',
+  'SPD':       'spd.svg',
+  'Zelení':    'zeleni.svg',
+  'Zel':       'zeleni.svg',
+  'SEN 21':    'sen21.svg',
+  'SEN21':     'sen21.svg',
+  'Trikolora': 'trikolora.svg',
+  'Svobodní':  'svobodni.svg',
+};
+
+/**
+ * Returns an array of logo filenames (from /public/logos/) for the given
+ * electoral party string. Handles coalitions by splitting on '+' and '·'.
+ */
+export function getPartyLogoFiles(electoralParty: string): string[] {
+  const seen = new Set<string>();
+  const result: string[] = [];
+
+  const parts = electoralParty.split(/[+·]/).map((p) => p.trim());
+  for (const part of parts) {
+    // Try progressively shorter prefixes to catch things like "KDU-ČSL+NMFM"
+    let matched = false;
+    for (const [key, file] of Object.entries(PARTY_LOGOS)) {
+      if (part === key || part.startsWith(key)) {
+        if (!seen.has(file)) { seen.add(file); result.push(file); }
+        matched = true;
+        break;
+      }
+    }
+    // Also try if a known key appears anywhere in the part
+    if (!matched) {
+      for (const [key, file] of Object.entries(PARTY_LOGOS)) {
+        if (part.includes(key)) {
+          if (!seen.has(file)) { seen.add(file); result.push(file); }
+          break;
+        }
+      }
+    }
+  }
+  return result;
+}
+
 // Titles that precede the name in Czech convention
 const PRE_NAME_TITLES = new Set([
   'Bc.', 'Ing.', 'Mgr.', 'MgA.', 'MUDr.', 'MDDr.', 'MVDr.',

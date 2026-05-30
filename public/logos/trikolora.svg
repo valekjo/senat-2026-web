@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 40">
+  <rect width="40" height="40" fill="#D7141A"/>
+  <rect x="40" width="40" height="40" fill="white"/>
+  <rect x="80" width="40" height="40" fill="#11457E"/>
+  <text x="60" y="27" font-family="system-ui,sans-serif" font-size="11" font-weight="bold" fill="#11457E" text-anchor="middle">Trikolóra</text>
+</svg>
