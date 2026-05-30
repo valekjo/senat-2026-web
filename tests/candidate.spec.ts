@@ -4,7 +4,7 @@ test.describe('Candidate page', () => {
   test('shows candidate name and basic info', async ({ page }) => {
     await page.goto('kandidat/3/5/');
     // Candidate 5 in Cheb is Plevný Miroslav (winner)
-    await expect(page.getByRole('heading', { name: /Plevný/ })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Plevný/ }).first()).toBeVisible();
     await expect(page.getByText(/Povolání/i)).toBeVisible();
     await expect(page.getByText(/Bydliště/i)).toBeVisible();
   });
@@ -16,15 +16,15 @@ test.describe('Candidate page', () => {
     await expect(page.getByText(/2\. kolo/)).toBeVisible();
   });
 
-  test('shows campaign section', async ({ page }) => {
+  test('shows campaign section in markdown profile', async ({ page }) => {
     await page.goto('kandidat/3/1/');
-    await expect(page.getByText(/Zapojte se do kampaně/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Zapojení do kampaně/i })).toBeVisible();
   });
 
-  test('shows candidate Q&A section', async ({ page }) => {
+  test('shows candidate Q&A section in markdown profile', async ({ page }) => {
     await page.goto('kandidat/3/1/');
-    await expect(page.getByText(/Jaká je vaše motivace/i)).toBeVisible();
-    await expect(page.getByText(/Kde vidíte republiku/i)).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Motivace ke kandidatuře/i })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /Kde vidíte republiku/i })).toBeVisible();
   });
 
   test('breadcrumb navigation back to district works', async ({ page }) => {
