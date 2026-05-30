@@ -55,11 +55,6 @@ const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STAN
       <div>
         <div class="flex items-center gap-2 flex-wrap">
           <h1 class="text-3xl font-bold text-gray-900">{displayName}</h1>
-          {isWinner && (
-            <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background-color: #D7141A; color: white;">
-              Zvolený senátor
-            </span>
-          )}
         </div>
         <p class="text-gray-500 mt-1">Obvod {district.id} · {district.name}</p>
         {candidate.hlidacStatuUrl && (
