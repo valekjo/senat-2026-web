@@ -1,3 +1,6 @@
+EDIT: Deprecated, moved to https://github.com/hacknipolitiku/project-senat
+
+
 # Volby do senátu 2026
 
 Webová stránka přibližující kandidáty do senátních voleb v České republice 2026.
