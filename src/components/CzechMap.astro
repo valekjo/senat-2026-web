@@ -92,11 +92,11 @@ for (const [idStr] of Object.entries(DISTRICTS)) {
 </div>
 
 <style>
-  .s-active {
+  :global(.s-active) {
     cursor: pointer;
     transition: fill 0.2s ease;
   }
-  .s-active:hover {
+  :global(.s-active:hover) {
     fill: #bfdbfe !important;
   }
 </style>
