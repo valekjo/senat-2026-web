@@ -1,6 +1,6 @@
 ---
 import Layout from '../../../layouts/Layout.astro';
-import { getCandidates, getDistrict, getCandidateProfileSections } from '../../../lib/data';
+import { getCandidates, getDistrict, getCandidateProfileSections, formatCzechName } from '../../../lib/data';
 import { marked } from 'marked';
 
 export async function getStaticPaths() {
@@ -26,11 +26,13 @@ const winner = round2Candidates.length > 0
 const isWinner = winner?.candidateNumber === candidate.candidateNumber;
 const hasResults = district.candidates.some((c) => c.round1Votes > 0);
 const profileSections = getCandidateProfileSections(districtId, candidateNumber);
+const displayName = formatCzechName(candidate.name);
+const birthYear = 2026 - candidate.age;
 const POLITICAL_STANCES_HEADING = 'Projevované politické postoje';
 const politicalStancesSection = profileSections.find((s) => s.heading === POLITICAL_STANCES_HEADING);
 const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STANCES_HEADING);
 ---
-<Layout title={candidate.name} description={`${candidate.name} – kandidát v obvodu ${district.id} ${district.name}`}>
+<Layout title={displayName} description={`${displayName} – kandidát v obvodu ${district.id} ${district.name}`}>
   <nav class="text-sm mb-6 flex items-center gap-2" style="color: #11457E;">
     <a href={base} class="hover:opacity-70 transition-opacity" style="color: #11457E;">Přehled obvodů</a>
     <span style="color: #D7141A;">›</span>
@@ -51,7 +53,7 @@ const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STAN
       </div>
       <div>
         <div class="flex items-center gap-2 flex-wrap">
-          <h1 class="text-3xl font-bold text-gray-900">{candidate.name}</h1>
+          <h1 class="text-3xl font-bold text-gray-900">{displayName}</h1>
           {isWinner && (
             <span class="text-sm px-2 py-0.5 rounded-full font-medium" style="background-color: #D7141A; color: white;">
               Zvolený senátor
@@ -80,7 +82,7 @@ const otherSections = profileSections.filter((s) => s.heading !== POLITICAL_STAN
       <dl class="space-y-3">
         <div class="flex justify-between gap-4">
           <dt class="text-sm text-gray-500">Věk</dt>
-          <dd class="text-sm font-medium text-gray-900">{candidate.age} let</dd>
+          <dd class="text-sm font-medium text-gray-900">*{birthYear} ({candidate.age} let)</dd>
         </div>
         <div class="flex justify-between gap-4">
           <dt class="text-sm text-gray-500">Volební strana</dt>

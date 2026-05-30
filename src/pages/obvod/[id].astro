@@ -1,6 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import { getDistricts, getDistrict } from '../../lib/data';
+import { getDistricts, getDistrict, formatCzechName } from '../../lib/data';
 
 export async function getStaticPaths() {
   return getDistricts().map((d) => ({
@@ -50,7 +50,7 @@ const hasResults = sorted.some((c) => c.round1Votes > 0);
             <div class="min-w-0">
               <div class="flex items-center gap-2 flex-wrap">
                 <span class="text-xs text-gray-400 font-mono">#{c.candidateNumber}</span>
-                <span class="font-semibold text-gray-900">{c.name}</span>
+                <span class="font-semibold text-gray-900">{formatCzechName(c.name)}</span>
                 {winner && (
                   <span class="text-xs px-2 py-0.5 rounded-full font-medium" style="background-color: #D7141A; color: white;">
                     Zvolený

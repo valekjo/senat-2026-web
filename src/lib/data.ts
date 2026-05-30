@@ -84,6 +84,86 @@ export function getCandidate(districtId: number, candidateNumber: number): Candi
   );
 }
 
+// Titles that precede the name in Czech convention
+const PRE_NAME_TITLES = new Set([
+  'Bc.', 'Ing.', 'Mgr.', 'MgA.', 'MUDr.', 'MDDr.', 'MVDr.',
+  'JUDr.', 'PhDr.', 'RNDr.', 'PharmDr.', 'ThDr.', 'PaedDr.',
+  'RSDr.', 'Dr.', 'Dr.-', 'doc.', 'Doc.', 'prof.', 'Prof.',
+  'gen.', 'plk.', 'brig.', 'gšt.', 'generálmajor',
+]);
+
+// Titles that follow the name (after a comma) in Czech convention
+const POST_NAME_TITLES = new Set([
+  'Ph.D.', 'PhD.', 'CSc.', 'DrSc.', 'DSc.', 'DiS.',
+  'MBA', 'LL.M.', 'MSc.', 'DBA', 'MPA', 'dr.',
+]);
+
+// All recognised title tokens (used to find where the name ends)
+const ALL_TITLES = new Set([...PRE_NAME_TITLES, ...POST_NAME_TITLES,
+  'et.', 'et', 'v.', 'v', 'záloze', 'h.', 'c.', 'dr.',
+]);
+
+/**
+ * Reformat a raw candidate name from the source data format
+ * "Surname [Surname2] Firstname [Titles…]" into Czech display convention
+ * "[pre-titles] Firstname Surname[, post-titles]"
+ */
+export function formatCzechName(raw: string): string {
+  // Normalise: strip trailing commas from tokens, collapse spaces
+  const tokens = raw.trim().split(/\s+/).map((t) => t.replace(/,+$/, ''));
+
+  // Find the index of the first title token
+  let titleStart = tokens.length;
+  for (let i = 0; i < tokens.length; i++) {
+    if (ALL_TITLES.has(tokens[i])) {
+      titleStart = i;
+      break;
+    }
+  }
+
+  const nameParts = tokens.slice(0, titleStart);
+  const titleParts = tokens.slice(titleStart);
+
+  if (nameParts.length === 0) return raw;
+
+  // Last name token is the first name; everything before is surname(s)
+  const firstName = nameParts[nameParts.length - 1];
+  const surnames = nameParts.slice(0, -1);
+
+  // Classify title tokens into pre-name and post-name groups.
+  // Post-name titles are comma-separated; connectors/modifiers are space-joined
+  // onto the preceding token so compound forms like "dr. h. c." stay intact.
+  const preTitles: string[] = [];
+  const postGroups: string[] = []; // each entry becomes one comma-separated item
+  let inPost = false;
+
+  for (const t of titleParts) {
+    if (POST_NAME_TITLES.has(t)) {
+      inPost = true;
+      postGroups.push(t);
+    } else if (PRE_NAME_TITLES.has(t)) {
+      if (inPost) postGroups.push(t);
+      else preTitles.push(t);
+    } else {
+      // connector / modifier (et, v., záloze, h., c., dr.) — space-join onto last entry
+      if (inPost) {
+        if (postGroups.length > 0) postGroups[postGroups.length - 1] += ' ' + t;
+        else postGroups.push(t);
+      } else {
+        preTitles.push(t);
+      }
+    }
+  }
+
+  let result = '';
+  if (preTitles.length > 0) result += preTitles.join(' ') + ' ';
+  result += firstName;
+  if (surnames.length > 0) result += ' ' + surnames.join(' ');
+  if (postGroups.length > 0) result += ', ' + postGroups.join(', ');
+
+  return result;
+}
+
 export interface ProfileSection {
   heading: string;
   body: string;
