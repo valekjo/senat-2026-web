@@ -58,18 +58,6 @@ const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
           <h1 class="text-3xl font-bold text-gray-900">{displayName}</h1>
         </div>
         <p class="text-gray-500 mt-1">Obvod {district.id} · {district.name}</p>
-        {candidate.hlidacStatuUrl && (
-          <a
-            href={candidate.hlidacStatuUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 mt-2 px-3 py-1.5 rounded border text-xs font-medium transition-colors hover:bg-gray-50"
-            style="border-color: #e5e7eb;"
-          >
-            <img src={`${base}logos/hlidac-statu.png`} alt="" class="h-4 w-auto" />
-            Hlídač státu
-          </a>
-        )}
       </div>
     </div>
   </div>
@@ -105,14 +93,23 @@ const profileMd = rawMd.replace(/^---\n[\s\S]*?\n---\n?/, '');
           <dt class="text-sm text-gray-500">Bydliště</dt>
           <dd class="text-sm font-medium text-gray-900 text-right">{candidate.residence}</dd>
         </div>
+
+        <div class="flex justify-between gap-4">
+          <dt class="text-sm text-gray-500">Hlídač státu</dt>
+          <dd class="text-sm font-medium text-gray-900 text-right">{candidate.hlidacStatuUrl ? <a href={candidate.hlidacStatuUrl} target="_blank" rel="noopener noreferrer">{candidate.hlidacStatuUrl}</a> : 'N/A'}</dd>
+        </div>
       </dl>
     </section>
 
+    <section class="rounded-lg p-5" style="border: 1px solid #11457E30;">
+        <h2 class="text-xs font-semibold uppercase tracking-wide mb-4" style="color: #11457E;">Jak se zapojit</h2>
+        {profileMd && (
+          <div class="profile-content prose prose-sm max-w-none text-gray-700 mt-6"
+            set:html={marked.parse(profileMd)} />
+        )}
+    </section>
   </div>
 
-  {profileMd && (
-    <div class="profile-content prose prose-sm max-w-none text-gray-700 mt-6"
-      set:html={marked.parse(profileMd)} />
-  )}
+  
 </Layout>
 
